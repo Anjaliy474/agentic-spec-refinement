@@ -1,0 +1,19 @@
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+.env
+.pytest_cache/
+.ruff_cache/
+.ipynb_checkpoints/
+# data and model artifacts
+data/raw/*
+data/processed/*
+!data/**/.gitkeep
+models/
+*.safetensors
+*.gguf
+*.bin
+experiments/runs/
+.DS_Store

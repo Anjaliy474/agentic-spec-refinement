@@ -1,0 +1,26 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "reqhq"
+version = "0.1.0"
+description = "Agentic specification refinement: LLM orchestrator with SLM critics and targeted human questions"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "pydantic>=2",
+    "pyyaml>=6",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8", "ruff>=0.5"]
+
+[project.scripts]
+reqhq = "reqhq.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.ruff]
+line-length = 100

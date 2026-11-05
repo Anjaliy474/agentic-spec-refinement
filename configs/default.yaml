@@ -1,0 +1,13 @@
+# Default pipeline configuration (placeholders until models are chosen)
+orchestrator:
+  model: TBD
+critics:
+  security: {model: TBD}
+  architecture: {model: TBD}
+  performance: {model: TBD}
+gating:
+  ask_on_missing_context: true
+  ask_on_conflict: true
+eval:
+  runs_per_config: 3
+  bootstrap_samples: 10000
