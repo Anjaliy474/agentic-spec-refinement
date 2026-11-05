@@ -50,6 +50,41 @@ pip install -e ".[dev]"
 pytest
 ```
 
+Models run locally through [Ollama](https://ollama.com) by default:
+
+```bash
+ollama pull qwen2.5:7b   # orchestrator and oracle
+ollama pull qwen2.5:3b   # critics
+```
+
+To use another backend (LM Studio, vLLM, a hosted API), set `backend: openai` in `configs/default.yaml` and `OPENAI_BASE_URL` / `OPENAI_API_KEY`.
+
+## Usage
+
+```bash
+# Interactive: the pipeline asks you only the questions it needs
+reqhq run data/examples/clinic_booking_prd.md
+
+# No human (baseline B3) and ask-everything review (baseline B4)
+reqhq run data/examples/clinic_booking_prd.md --human none
+reqhq run data/examples/clinic_booking_prd.md --mode all
+
+# Simulated product owner that answers from a reference spec
+reqhq run PRD.md --human oracle --reference REFERENCE_SPEC.md
+
+# Ablation: drop a critic
+reqhq run PRD.md --critics security,performance
+```
+
+Each run writes to `experiments/runs/<prd>/`:
+
+| File | Contents |
+|---|---|
+| `spec.md` | Final spec; every line shows its PRD sentence, critic and/or answer |
+| `spec.json` | Same spec, machine-readable |
+| `findings.json` | Raw critic findings |
+| `usage.json` | Calls, tokens and seconds per component |
+
 ## Team
 
 | Name | Roll no. |
