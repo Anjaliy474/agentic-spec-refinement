@@ -62,6 +62,7 @@ class LLM(ABC):
         self.model = model
         self.temperature = temperature
         self.usage = Usage()
+        self.warnings: list[str] = []
 
     @abstractmethod
     def _complete(self, system: str, prompt: str, json_mode: bool) -> tuple[str, int, int]:
@@ -92,6 +93,15 @@ class LLM(ABC):
                     tag=f"{tag}:retry",
                 )
         raise AssertionError("unreachable")
+
+
+    def try_complete_json(self, prompt: str, system: str = "", tag: str = ""):
+        """Like ``complete_json`` but returns None (and records a warning) on bad JSON."""
+        try:
+            return self.complete_json(prompt, system, tag)
+        except ValueError as err:
+            self.warnings.append(f"{tag}: invalid JSON after retry ({err})")
+            return None
 
 
 def parse_json(text: str):

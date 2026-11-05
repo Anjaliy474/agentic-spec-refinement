@@ -50,16 +50,16 @@ def detect_conflicts(llm: LLM, findings: list[Finding]) -> list[Conflict]:
     items = "\n".join(
         f"[{i}] ({f.critic}) {f.proposed_requirement or f.description}" for i, f in enumerate(findings)
     )
-    data = llm.complete_json(
+    data = llm.try_complete_json(
         CONFLICT_PROMPT.format(items=items), system=CONFLICT_SYSTEM, tag="gate:conflicts"
     )
     raw = data.get("conflicts", []) if isinstance(data, dict) else data
     conflicts: list[Conflict] = []
     seen: set[tuple[int, int]] = set()
-    for c in raw or []:
+    for c in raw if isinstance(raw, list) else []:
         try:
             a, b = int(c["a"]), int(c["b"])
-        except (KeyError, TypeError, ValueError):
+        except (KeyError, TypeError, ValueError, IndexError):
             continue
         pair = (min(a, b), max(a, b))
         if a == b or pair in seen or not (0 <= a < len(findings) and 0 <= b < len(findings)):

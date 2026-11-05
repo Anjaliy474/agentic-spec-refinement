@@ -81,7 +81,7 @@ class PromptedCritic(Critic):
 
     def review(self, prd: PRD, draft: list[Requirement]) -> list[Finding]:
         frs = "\n".join(f"{r.id}: {r.text}" for r in draft) or "(none)"
-        data = self.llm.complete_json(
+        data = self.llm.try_complete_json(
             PROMPT.format(
                 prd=prd.numbered(),
                 frs=frs,
@@ -93,6 +93,8 @@ class PromptedCritic(Critic):
             tag=f"critic:{self.name}",
         )
         items = data.get("findings", []) if isinstance(data, dict) else data
+        if not isinstance(items, list):
+            return []
         return [f for item in items or [] if (f := self._to_finding(item, prd)) is not None]
 
     def _to_finding(self, item, prd: PRD) -> Finding | None:

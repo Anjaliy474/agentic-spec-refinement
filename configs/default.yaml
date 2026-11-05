@@ -1,13 +1,24 @@
-# Default pipeline configuration (placeholders until models are chosen)
+# Default pipeline configuration.
+# backend: "ollama" (local, default) or "openai" (any OpenAI-compatible server;
+# set OPENAI_BASE_URL / OPENAI_API_KEY or base_url / api_key here).
+
 orchestrator:
-  model: TBD
+  backend: ollama
+  model: qwen2.5:7b
+
+# Critics are small models. v1 = prompted; fine-tuned SLMs plug in later.
 critics:
-  security: {model: TBD}
-  architecture: {model: TBD}
-  performance: {model: TBD}
-gating:
-  ask_on_missing_context: true
-  ask_on_conflict: true
-eval:
-  runs_per_config: 3
-  bootstrap_samples: 10000
+  security:
+    backend: ollama
+    model: qwen2.5:3b
+  architecture:
+    backend: ollama
+    model: qwen2.5:3b
+  performance:
+    backend: ollama
+    model: qwen2.5:3b
+
+# Model that plays the product owner when --human oracle is used.
+oracle:
+  backend: ollama
+  model: qwen2.5:7b
