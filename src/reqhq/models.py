@@ -34,6 +34,7 @@ class Requirement(BaseModel):
     is_functional: bool
     category: NFRCategory | None = None
     trace: list[TraceLink] = Field(default_factory=list)
+    open_issue: bool = Field(default=False, description="True if it still depends on an unanswered question")
 
 
 class Finding(BaseModel):
@@ -41,17 +42,20 @@ class Finding(BaseModel):
 
     critic: str
     category: NFRCategory
+    kind: str = Field(default="missing", description="'missing' or 'vague'")
     description: str
     prd_sentence_id: str | None = None
     needs_business_context: bool = False
+    question: str | None = Field(default=None, description="What to ask a human, if context is missing")
     proposed_requirement: str | None = None
 
 
 class Question(BaseModel):
     id: str
     text: str
-    reason: str = Field(description="'missing_context' or 'conflict'")
+    reason: str = Field(description="'missing_context', 'conflict' or 'review'")
     findings: list[Finding] = Field(default_factory=list)
+    answer: str | None = None
 
 
 class Spec(BaseModel):

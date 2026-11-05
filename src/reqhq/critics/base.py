@@ -3,6 +3,7 @@ from __future__ import annotations
 from abc import ABC, abstractmethod
 
 from reqhq.models import Finding, Requirement
+from reqhq.prd import PRD
 
 
 class Critic(ABC):
@@ -11,5 +12,5 @@ class Critic(ABC):
     name: str
 
     @abstractmethod
-    def review(self, prd_sentences: dict[str, str], draft: list[Requirement]) -> list[Finding]:
+    def review(self, prd: PRD, draft: list[Requirement]) -> list[Finding]:
         ...
